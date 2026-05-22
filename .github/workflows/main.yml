@@ -1,8 +1,11 @@
 name: Ireland House Finder
 
-# De momento solo se ejecuta a mano (boton "Run workflow") para validar.
-# Cuando funcione, en un segundo commit anyadimos el schedule cada 5 minutos.
 on:
+  # Lanzamiento programado: cada 5 minutos. GitHub puede retrasar bajo carga
+  # hasta 10-15 min en momentos puntuales; es lo normal y aceptable.
+  schedule:
+    - cron: "*/5 * * * *"
+  # Tambien lanzable a mano desde la pestana Actions del repo.
   workflow_dispatch:
 
 # Una sola ejecucion del bot a la vez: si llega otra se encola.
