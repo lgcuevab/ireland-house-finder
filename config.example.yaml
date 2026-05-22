@@ -1,0 +1,47 @@
+# -------------------------------------------------------------------
+# PLANTILLA DE CONFIGURACION
+# Copia este fichero como  config.yaml  y rellena tus datos reales.
+# config.yaml NO se sube a internet (esta protegido en .gitignore).
+# -------------------------------------------------------------------
+
+gmail:
+  usuario: "drcuevadigestivo@gmail.com"
+  # Contrasena de aplicacion de 16 letras (Fase 0 - tarea A)
+  app_password: "xxxx xxxx xxxx xxxx"
+  # Carpeta/etiqueta donde llegan las alertas de los portales
+  carpeta: "INBOX"
+
+telegram:
+  # Token del bot, lo da @BotFather (Fase 0 - tarea C)
+  bot_token: "123456789:ABCdef..."
+  # Identificadores de chat a los que avisar (uno por persona)
+  chat_ids:
+    - 111111111
+    - 222222222
+
+google_sheet:
+  # ID de tu hoja "Ireland Properties Contacted"
+  sheet_id: "1XsSx3WAIum7OkSJ20k6fUQj6wGIIUNwmrTuj57EgjOA"
+  # Nombre de la pestana donde anadir filas
+  pestana: "Cork y Eje Cork Bantry - House"
+  # Ruta al fichero JSON de la cuenta de servicio (Fase 0 - tarea D)
+  credenciales_json: "credentials/service-account.json"
+
+filtros:
+  precio_max_eur: 3000
+  habitaciones_min: 3
+  banos_min: 2
+  requiere_amueblada: true
+  distancia_max_km: 50
+  meses_disponibilidad: ["2026-07", "2026-08"]
+
+referencias:
+  # Cork University Hospital (se afinan en Fase 2)
+  cuh_lat: 51.8836
+  cuh_lon: -8.5206
+  # Centro de Cork
+  centro_lat: 51.8985
+  centro_lon: -8.4756
+
+# Cada cuanto revisar el correo (segundos)
+intervalo_segundos: 120

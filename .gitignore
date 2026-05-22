@@ -1,0 +1,16 @@
+# Secretos: NUNCA se suben a internet
+config.yaml
+credentials/
+mensajes/
+.env
+
+# Documento personal de referencia, no es codigo
+Cork Accommodation.pdf
+
+# Entorno virtual de Python
+.venv/
+
+# Basura del sistema / Python
+__pycache__/
+*.pyc
+.DS_Store

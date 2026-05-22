@@ -1,0 +1,58 @@
+name: Ireland House Finder
+
+# De momento solo se ejecuta a mano (boton "Run workflow") para validar.
+# Cuando funcione, en un segundo commit anyadimos el schedule cada 5 minutos.
+on:
+  workflow_dispatch:
+
+# Una sola ejecucion del bot a la vez: si llega otra se encola.
+concurrency:
+  group: bot-run
+  cancel-in-progress: false
+
+# El workflow necesita escribir en el repo para guardar data/vistos.db.
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install --quiet -r requirements.txt
+
+      - name: Restaurar secretos a ficheros locales del runner
+        env:
+          CONFIG_YAML: ${{ secrets.CONFIG_YAML }}
+          SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          PRESENTACION_TXT: ${{ secrets.PRESENTACION_TXT }}
+          MASCOTA_TXT: ${{ secrets.MASCOTA_TXT }}
+        run: |
+          mkdir -p credentials mensajes data
+          printf '%s' "$CONFIG_YAML" > config.yaml
+          printf '%s' "$SERVICE_ACCOUNT_JSON" > credentials/service-account.json
+          printf '%s' "$PRESENTACION_TXT" > mensajes/presentacion.txt
+          printf '%s' "$MASCOTA_TXT" > mensajes/mascota.txt
+
+      - name: Ejecutar el bot
+        run: python -m src.main
+
+      - name: Persistir vistos.db en el repo
+        run: |
+          if [[ -n "$(git status --porcelain data/vistos.db)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add data/vistos.db
+            git commit -m "chore: update vistos.db [bot]"
+            git push
+          else
+            echo "Sin cambios en vistos.db."
+          fi

@@ -1,0 +1,11 @@
+# Librerias de Python que necesita la automatizacion.
+# Se instalan con:  pip install -r requirements.txt
+
+imap-tools        # leer el correo de Gmail (alertas de los portales)
+requests          # abrir las paginas de los anuncios
+beautifulsoup4    # extraer datos de esas paginas
+lxml              # motor de lectura HTML para beautifulsoup
+geopy             # calcular distancias (a Cork centro y a CUH)
+gspread           # escribir en el Google Sheet
+google-auth       # autenticacion con Google
+PyYAML            # leer el fichero de configuracion config.yaml
