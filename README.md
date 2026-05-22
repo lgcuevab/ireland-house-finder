@@ -59,19 +59,23 @@ ireland-house-finder/
 - [x] **Fase 2** - Escribir cada casa nueva en el Google Sheet.
 - [x] **Fase 3** - Generar borradores de mensaje (presentacion + mascota).
 - [ ] **Fase 4** - Anadir mas portales (MyHome, Rent.ie, FindAHome) por email.
-- [ ] **Fase 5** - Desplegar en la nube 24/7 (ahora solo se ejecuta a mano).
+- [x] **Fase 5** - Despliegue 24/7 en GitHub Actions (cada 5 min).
 
 ## Estado actual
 
-**Fases 1, 2 y 3 COMPLETAS.** Para cada casa nueva que cumple los filtros
-el bot envia por Telegram (a Lucho y a Esther):
-  1. El aviso con los datos del anuncio.
-  2. La presentacion de la solicitud (lista para copiar y pegar).
-  3. El parrafo sobre el perrito (lista para copiar y pegar).
-Y anyade la fila correspondiente al Google Sheet.
+**Fases 1, 2, 3 y 5 COMPLETAS.** El bot trabaja solo 24/7 en GitHub Actions
+(repo: github.com/lgcuevab/ireland-house-finder). Cada 5 minutos:
 
-Siguiente: Fase 4 (mas portales) y Fase 5 (despliegue 24/7; ahora mismo
-el bot solo trabaja cuando se lanza a mano).
+  1. Lee las alertas de Daft en Gmail (INBOX + Spam).
+  2. Filtra por requisitos y descarta repetidos.
+  3. Por cada casa nueva que cumple, envia por Telegram a Lucho y a Esther:
+     a) El aviso con los datos del anuncio.
+     b) La presentacion de la solicitud (copiar y pegar).
+     c) El parrafo sobre el perrito (copiar y pegar).
+  4. Anyade la fila al Google Sheet.
+
+Solo queda la Fase 4 (anyadir MyHome.ie, Rent.ie y FindAHome.ie cuando
+Lucho cree las alertas guardadas en esos portales).
 
 Accion pendiente para Lucho (cuando pueda):
   - Marcar las alertas de Daft como "No es spam" en Gmail y crear un
