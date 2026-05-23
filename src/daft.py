@@ -99,10 +99,6 @@ def _parsear_asunto(subject):
 def _parsear_email(msg):
     """Convierte un email de alerta en un dict de anuncio. None si no encaja."""
     subject = str(make_header(decode_header(msg.get("Subject", ""))))
-    info = _parsear_asunto(subject)
-    if not info:
-        return None
-    localidad, tipo, precio_mes, precio_texto = info
 
     html_body = ""
     for part in msg.walk():
@@ -119,6 +115,32 @@ def _parsear_email(msg):
     listing_id = int(m_id.group(1)) if m_id else None
     if not listing_id:
         return None
+
+    info = _parsear_asunto(subject)
+    if info:
+        localidad, tipo, precio_mes, precio_texto = info
+    else:
+        # Formato de dirección completa: extraer tipo de la URL y precio del cuerpo
+        path = urlparse(url).path
+        tipo = "House"
+        for t in ("apartment", "bungalow", "studio", "duplex", "townhouse"):
+            if f"/{t}-" in path:
+                tipo = t.capitalize()
+                break
+        m_precio = re.search(r"€([\d,]+)\s*per\s*(month|week)", text, re.IGNORECASE)
+        if not m_precio:
+            return None
+        n = int(m_precio.group(1).replace(",", ""))
+        if m_precio.group(2).lower() == "week":
+            precio_mes = round(n * 52 / 12)
+            precio_texto = f"€{n} per week"
+        else:
+            precio_mes = n
+            precio_texto = f"€{n:,} per month"
+        # Localidad: última parte significativa del asunto (excluyendo "Co. Cork")
+        partes = [p.strip() for p in subject.split(",")]
+        partes = [p for p in partes if p and not re.match(r"^co\.?\s*cork$", p, re.IGNORECASE)]
+        localidad = partes[-1] if partes else ""
 
     m_b = re.search(r"(\d+)\s*Bed", text)
     beds = int(m_b.group(1)) if m_b else None
@@ -162,7 +184,7 @@ def buscar(min_beds=3, max_anuncios=300):
     try:
         resultados = []
         vistos = set()
-        for carpeta in ["INBOX", '"[Gmail]/Spam"']:
+        for carpeta in ["INBOX", '"[Gmail]/Spam"', '"aa Ireland Houses"']:
             try:
                 typ, _ = m.select(carpeta)
                 if typ != "OK":
