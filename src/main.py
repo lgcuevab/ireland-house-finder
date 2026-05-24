@@ -6,7 +6,7 @@ Ejecucion (desde la carpeta del proyecto):
 import html
 from datetime import datetime
 
-from . import borradores, config, daft, notifier, sheet, storage
+from . import config, daft, notifier, sheet, storage
 from .filters import evaluar
 
 
@@ -80,11 +80,6 @@ def ciclo():
                 print(f"  + escrito en el Sheet (fila {resultado}): {a['titulo']}")
         except Exception as e:
             print(f"  ! ERROR al escribir en el Sheet: {repr(e)[:200]}")
-        # 3) Borradores de mensaje (presentacion + mascota) para copiar-pegar.
-        try:
-            borradores.enviar_borradores(cfg, a)
-        except Exception as e:
-            print(f"  ! ERROR al enviar borradores: {repr(e)[:200]}")
 
     # Marcar como vistos todos los anuncios recibidos (cumplan o no).
     storage.marcar([a["id"] for a in anuncios])
